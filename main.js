@@ -1,31 +1,58 @@
 /**
- * SVG情報を取得する
- * @returns {{ element: HTMLElement, viewBox: { x: number, y: number, width: number, height: number }}}
+ * object要素からsvg情報を取得する
+ * @param {element} objectElement - objectタグ要素
+ * @return {Promise} - resolveでsvg情報を返す
  */
-function getSvgInfo() {
-    const svgElement = document.body.children.item(1).contentDocument.children[0];
-    const viewBoxParams = svgElement.getAttribute('viewBox').split(' ').map((param) => +param);
-    return {
-        element: svgElement,
-        viewBox: {
-            x: viewBoxParams[0],
-            y: viewBoxParams[1],
-            width: viewBoxParams[2],
-            height: viewBoxParams[3]
+function getSvgInfoFromObjectElement(objectElement) {
+    return new Promise((resolve) => {
+        const loadSvgElement = () => {
+            const svgElement = objectElement.contentDocument ? objectElement.contentDocument.querySelector('svg') : null;
+            if (svgElement) {
+                const viewBoxParams = svgElement.getAttribute('viewBox').split(' ').map((param) => +param);
+                resolve({
+                element: svgElement,
+                viewBox: {
+                    x: viewBoxParams[0],
+                    y: viewBoxParams[1],
+                    width: viewBoxParams[2],
+                    height: viewBoxParams[3]
+                }
+                });
+            } else {
+                // まだSVGを読み込めていない場合はonloadしてから再度取得しにいく
+                objectElement.onload = loadSvgElement;
+            }
+        };
+        loadSvgElement();
+    });
+}
+
+
+function getSvgCoord(svgInfo) {
+    const pathElements = svgInfo.element.children;
+    var pathStr = "";
+    for(var c = 0;c < pathElements.length;c++) {
+        if(c != 0) {
+            pathStr += ",";
         }
-    };
+        const pathElement = pathElements[c];
+        pathStr += "(";
+        console.log(pathElement.getTotalLength());
+
+        for(var i = 0;i < pathElement.getTotalLength();i++) {
+            const pt = pathElement.getPointAtLength(i);
+            pathStr += String(pt.x);
+            pathStr += ",";
+            pathStr += String(pt.y);
+            pathStr += ",";
+            console.log(i,pt);
+        }
+        pathStr += ")";
+        pathStr = pathStr.replace(",)",")");
+    }
+
+    console.log(pathStr);
 }
 
-
-function getSvgCoord() {
-    // SVG情報を取得する
-    const svgInfo = getSvgInfo();
-    const pathElement = svgInfo.element.children[0];
-
-    // 今の位置のSVG座標を求める
-    const pt = pathElement.getPointAtLength(0);
-
-    console.log(pt);
-}
-
-//setTimeout(getSvgCoord,1000);
+  
+document.body.insertAdjacentHTML("beforeend",'<object type="image/svg+xml" data="mplus_stroke/kanji-01/亜.svg" onload="getSvgInfoFromObjectElement(this).then((svgInfo) => {console.log(svgInfo.element);getSvgCoord(svgInfo);});" width="300" height="300"></object>');
