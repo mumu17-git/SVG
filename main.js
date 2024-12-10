@@ -3,8 +3,7 @@
  * @returns {{ element: HTMLElement, viewBox: { x: number, y: number, width: number, height: number }}}
  */
 function getSvgInfo() {
-    const svgElement = document.body.children.item(1);
-    console.log(document.body.children.item(1));
+    const svgElement = document.body.children.item(1).contentDocument.children[0];
     const viewBoxParams = svgElement.getAttribute('viewBox').split(' ').map((param) => +param);
     return {
         element: svgElement,
@@ -21,7 +20,7 @@ function getSvgInfo() {
 function getSvgCoord() {
     // SVG情報を取得する
     const svgInfo = getSvgInfo();
-    const pathElement = svgInfo.element.childNodes()[0];
+    const pathElement = svgInfo.element.children[0];
 
     // 今の位置のSVG座標を求める
     const pt = pathElement.getPointAtLength(0);
@@ -29,4 +28,4 @@ function getSvgCoord() {
     console.log(pt);
 }
 
-setTimeout(getSvgCoord,3000);
+//setTimeout(getSvgCoord,1000);
