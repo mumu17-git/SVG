@@ -28,12 +28,14 @@ function getSvgInfoFromObjectElement(objectElement) {
 }
 
 
-function getSvgCoord(svgInfo) {
+function getSvgCoord(svgInfo,str) {
     const pathElements = svgInfo.element.children;
     var pathStr = "";
     for(var c = 0;c < pathElements.length;c++) {
         if(c != 0) {
             pathStr += ";";
+        }else {
+            pathStr += str;
         }
         const pathElement = pathElements[c];
         pathStr += "(";
@@ -57,7 +59,7 @@ function getSvgCoord(svgInfo) {
 }
 
 function objLoad(str) {
-    document.body.insertAdjacentHTML("beforeend",'<object type="image/svg+xml" data="mplus_stroke/data/'+str+'.svg" onload="getSvgInfoFromObjectElement(this).then((svgInfo) => {getSvgCoord(svgInfo);});" width="300" height="300"></object>');
+    document.body.insertAdjacentHTML("beforeend",'<object type="image/svg+xml" data="mplus_stroke/data/'+str+'.svg" onload="getSvgInfoFromObjectElement(this).then((svgInfo) => {getSvgCoord(svgInfo,"'+str+'");});" width="300" height="300"></object>');
 }
 
 //CSVファイルを読み込む関数getCSV()の定義
