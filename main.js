@@ -33,7 +33,7 @@ function getSvgCoord(svgInfo) {
     var pathStr = "";
     for(var c = 0;c < pathElements.length;c++) {
         if(c != 0) {
-            pathStr += ",";
+            pathStr += ";";
         }
         const pathElement = pathElements[c];
         pathStr += "(";
@@ -42,13 +42,13 @@ function getSvgCoord(svgInfo) {
         for(var i = 0;i < pathElement.getTotalLength();i++) {
             const pt = pathElement.getPointAtLength(i);
             pathStr += String(pt.x);
-            pathStr += ",";
+            pathStr += ";";
             pathStr += String(pt.y);
-            pathStr += ",";
+            pathStr += ";";
             //console.log(i,pt);
         }
         pathStr += ")";
-        pathStr = pathStr.replace(",)",")");
+        pathStr = pathStr.replace(";)",")");
     }
 
     //console.log(pathStr);
