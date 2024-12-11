@@ -63,7 +63,7 @@ function objLoad(str) {
 //CSVファイルを読み込む関数getCSV()の定義
 function getCSV(){
     var req = new XMLHttpRequest();
-    req.open("get", "data.csv", true);
+    req.open("get", "kanji-01.csv", true);
     req.send(null);
 		
     req.onload = function(){
