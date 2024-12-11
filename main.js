@@ -33,7 +33,7 @@ function getSvgCoord(svgInfo,str) {
     var pathStr = "";
     for(var c = 0;c < pathElements.length;c++) {
         if(c != 0) {
-            pathStr += ";";
+            pathStr += "~";
         }else {
             pathStr += str;
         }
@@ -44,13 +44,13 @@ function getSvgCoord(svgInfo,str) {
         for(var i = 0;i < pathElement.getTotalLength();i++) {
             const pt = pathElement.getPointAtLength(i);
             pathStr += String(pt.x);
-            pathStr += ";";
+            pathStr += "~";
             pathStr += String(pt.y);
-            pathStr += ";";
+            pathStr += "~";
             //console.log(i,pt);
         }
         pathStr += ")";
-        pathStr = pathStr.replace(";)",")");
+        pathStr = pathStr.replace("~)",")");
     }
 
     //console.log(pathStr);
@@ -59,7 +59,7 @@ function getSvgCoord(svgInfo,str) {
 }
 
 function objLoad(str) {
-    document.body.insertAdjacentHTML("beforeend",'<object type="image/svg+xml" data="mplus_stroke/data/'+str+'.svg" onload="getSvgInfoFromObjectElement(this).then((svgInfo) => {getSvgCoord(svgInfo,"'+str+'");});" width="300" height="300"></object>');
+    document.body.insertAdjacentHTML("beforeend",'<object type="image/svg+xml" data="mplus_stroke/data/'+str+'.svg" onload="getSvgInfoFromObjectElement(this).then((svgInfo) => {getSvgCoord(svgInfo,'+"'"+str+"'"+');});" width="300" height="300"></object>');
 }
 
 //CSVファイルを読み込む関数getCSV()の定義
