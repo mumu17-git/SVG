@@ -85,7 +85,7 @@ function downloadCSV() {
     const filename = "data.csv";
     const bom = new Uint8Array([0xef, 0xbb, 0xbf]);
     
-    const blob = new Blob([bom, cdata], { type: "text/csv" });
+    const blob = new Blob([bom, cdata.join("\n")], { type: "text/csv" });
    
     const link = document.createElement('a');
     link.download = filename;
